@@ -25,11 +25,32 @@ const loadStore = () => {
 }
 
 /**
+ * Obtener las tareas segun el filtro
+ * @param {String} filter 
+ */
+const getTodos = (filter = Filters.All) => {
+    switch (filter) {
+        case Filters.All:
+            return [...state.todos];
+        case Filters.Completed:
+            return state.todos.filter(todo => todo.done === true);
+        case Filters.Pending:
+            return state.todos.filter(todo => todo.done === false);
+        default:
+            throw new Error(`Option ${ filter } is not valid.`);
+    }
+}
+
+/**
  * Crear tarea
  * @param {String} description Descripción de la tarea
  */
 const addTodo = ( description = '' ) => {
-    throw new Error('Not implemented');
+    if (!description) {
+        throw new Error('Description is required');
+    }
+
+    state.todos.push(new Todo(description));
 }
 
 /**
@@ -45,23 +66,26 @@ const toggleTodo = (todoId) => {
  * @param {String} todoId Identidicador único de la tarea
  */
 const deleteTodo = (todoId) => {
-    throw new Error('Not implemented');
+    state.todos = state.todos.filter(todo => todo.id !== todoId);
 }
 
 /**
  * Eliminar las tareas completadas
  */
 const deleteCompleted = () => {
-    throw new Error('Not implemented');
+    state.todos = state.todos.filter(todo => todo.done);
 }
 
-
+/**
+ * 
+ * @param {Filters} newFilter 
+ */
 const setFilter = (newFilter = Filters.All) => {
-    throw new Error('Not implemented');
+    state.filter = newFilter;
 }
 
 const getCurrentFilter = () => {
-    throw new Error('Not implemented');
+    return state.filter;
 }
 
 export default {
@@ -69,6 +93,7 @@ export default {
     deleteCompleted,
     deleteTodo,
     getCurrentFilter,
+    getTodos,
     initStore,
     loadStore,
     setFilter,
