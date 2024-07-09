@@ -4,6 +4,7 @@ import { renderTodos } from './use-cases';
 
 const ElementIDs = {
     TodoList: '.todo-list',
+    NewTodoInput: '#new-todo-input',
 }
 
 /**
@@ -25,5 +26,22 @@ export const App = (elementId) => {
         displayTodos();
     })();
 
+    // Referencias HTML
+    const newDescriptionInput = document.querySelector(ElementIDs.NewTodoInput);
 
+    // Listeners
+    newDescriptionInput.addEventListener('keyup', (event) => {
+        // Si no ha presionado enter, se detiene
+        if (event.keyCode !== 13) {
+            return;
+        }
+        // Si esta vacio, no continua
+        if (event.target.value.trim().length === 0) {
+            return;
+        }
+
+        todoStore.addTodo( event.target.value.trim() );
+        displayTodos();
+        event.target.value = '';
+    });
 }
